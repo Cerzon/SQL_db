@@ -170,8 +170,7 @@ CREATE TABLE `posts` (
         ON DELETE CASCADE,
     FOREIGN KEY (`media_id`) REFERENCES `media` (`id`)
         ON UPDATE CASCADE
-        ON DELETE SET NULL,
-    CHECK (`media_id` IS NOT NULL OR `body` IS NOT NULL)
+        ON DELETE SET NULL
 );
 
 DROP TABLE IF EXISTS `attachments`;
