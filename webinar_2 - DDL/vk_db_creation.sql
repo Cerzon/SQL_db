@@ -151,9 +151,7 @@ CREATE TABLE `attachments` (
         ON DELETE CASCADE,
     FOREIGN KEY (`media_id`) REFERENCES `media` (`id`)
         ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CHECK (((`post_id` IS NULL) AND (`media_id` IS NOT NULL))
-        OR ((`post_id` IS NOT NULL) AND (`media_id` IS NULL)))
+        ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `likes`;
@@ -172,7 +170,9 @@ CREATE TABLE `likes`(
         ON DELETE CASCADE,
     FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CHECK (((`post_id` IS NULL) AND (`media_id` IS NOT NULL))
+        OR ((`post_id` IS NOT NULL) AND (`media_id` IS NULL)))
 );
 
 DROP TABLE IF EXISTS `profiles`;
