@@ -8,7 +8,7 @@ CREATE TABLE `users` (
     `firstname` VARCHAR(50),
     `lastname` VARCHAR(50),
     `email` VARCHAR(120) UNIQUE,
-    `phone` BIGINT, 
+    `phone` BIGINT UNIQUE,
     INDEX `users_phone_idx` (`phone`),
     INDEX `users_firstname_lastname_idx` (`firstname`, `lastname`)
 );
@@ -23,7 +23,8 @@ CREATE TABLE `messages` (
     INDEX `messages_from_user_idx` (`from_user_id`),
     INDEX `messages_to_user_idx` (`to_user_id`),
     FOREIGN KEY (`from_user_id`) REFERENCES `users` (`id`),
-    FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`)
+    FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`),
+    CHECK (`from_user_id` <> `to_user_id`)
 );
 
 DROP TABLE IF EXISTS `friend_requests`;
@@ -38,13 +39,14 @@ CREATE TABLE `friend_requests` (
 	INDEX (`initiator_user_id`),
     INDEX (`target_user_id`),
     FOREIGN KEY (`initiator_user_id`) REFERENCES `users` (`id`),
-    FOREIGN KEY (`target_user_id`) REFERENCES `users` (`id`)
+    FOREIGN KEY (`target_user_id`) REFERENCES `users` (`id`),
+    CHECK (`initiator_user_id` <> `target_user_id`)
 );
 
 DROP TABLE IF EXISTS `communities`;
 CREATE TABLE `communities`(
 	`id` SERIAL PRIMARY KEY,
-	`name` VARCHAR(150),
+	`name` VARCHAR(150) UNIQUE,
 
 	INDEX `communities_name_idx` (`name`)
 );
@@ -149,7 +151,9 @@ CREATE TABLE `attachments` (
         ON DELETE CASCADE,
     FOREIGN KEY (`media_id`) REFERENCES `media` (`id`)
         ON UPDATE CASCADE
-        ON DELETE CASCADE
+        ON DELETE CASCADE,
+    CHECK (((`post_id` IS NULL) AND (`media_id` IS NOT NULL))
+        OR ((`post_id` IS NOT NULL) AND (`media_id` IS NULL)))
 );
 
 DROP TABLE IF EXISTS `likes`;
