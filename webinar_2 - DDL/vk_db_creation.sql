@@ -23,8 +23,7 @@ CREATE TABLE `messages` (
     INDEX `messages_from_user_idx` (`from_user_id`),
     INDEX `messages_to_user_idx` (`to_user_id`),
     FOREIGN KEY (`from_user_id`) REFERENCES `users` (`id`),
-    FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`),
-    CHECK (`from_user_id` <> `to_user_id`)
+    FOREIGN KEY (`to_user_id`) REFERENCES `users` (`id`)
 );
 
 DROP TABLE IF EXISTS `friend_requests`;
@@ -39,8 +38,7 @@ CREATE TABLE `friend_requests` (
 	INDEX (`initiator_user_id`),
     INDEX (`target_user_id`),
     FOREIGN KEY (`initiator_user_id`) REFERENCES `users` (`id`),
-    FOREIGN KEY (`target_user_id`) REFERENCES `users` (`id`),
-    CHECK (`initiator_user_id` <> `target_user_id`)
+    FOREIGN KEY (`target_user_id`) REFERENCES `users` (`id`)
 );
 
 DROP TABLE IF EXISTS `communities`;
@@ -170,9 +168,7 @@ CREATE TABLE `likes`(
         ON DELETE CASCADE,
     FOREIGN KEY (`post_id`) REFERENCES `posts` (`id`)
         ON UPDATE CASCADE
-        ON DELETE CASCADE,
-    CHECK (((`post_id` IS NULL) AND (`media_id` IS NOT NULL))
-        OR ((`post_id` IS NOT NULL) AND (`media_id` IS NULL)))
+        ON DELETE CASCADE
 );
 
 DROP TABLE IF EXISTS `profiles`;
